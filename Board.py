@@ -1,3 +1,4 @@
+import os
 import numpy as np
 
 from Brain import Brain
@@ -84,6 +85,7 @@ class Board:
 		return '{}|{}|{}\n-----------\n{}|{}|{}\n-----------\n{}|{}|{}\n'.format(*row)
 
 	def train(self):
+		print('Training...')
 		p1 = p2 = t = 0
 		self.AI_1 = Brain(1)
 		self.AI_2 = Brain(-1)
@@ -121,8 +123,8 @@ class Board:
 				self.AI_2.train(0.5)
 
 		print('P1: {}\nP2: {}\nT: {}'.format(p1, p2, t))
-		for key, val in self.AI_1.memory.items():
-			print('{}: {}'.format(key[-2:], val))
+		self.AI_1.save('p1.dat')
+		self.AI_2.save('p2.dat')
 
 	def play(self):
 		self.reset()
@@ -134,6 +136,13 @@ class Board:
 				print(self)
 
 				if mode == 0:
+					if os.path.exists('p2.dat'):
+						self.AI_2 = Brain(-1)
+						self.AI_2.load('p2.dat')
+					else:
+						self.train()
+						self.reset()
+
 					while not self.done:
 						if self.first_player:
 							move = input("Your move: ")
@@ -167,5 +176,5 @@ class Board:
 
 if __name__ == '__main__':
 	board = Board()
-	board.train()
-	# board.play()
+	# board.train()
+	board.play()

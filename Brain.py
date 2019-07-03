@@ -72,4 +72,15 @@ class Brain:
 
 		self.reset()
 		# print(self.memory)
+
+	def save(self, file_name):
+		with open(file_name, 'w') as f:
+			for key, val in self.memory.items():
+				f.write('{} {}\n'.format(key, val))
+
+	def load(self, file_name):
+		with open(file_name, 'r') as f:
+			for line in f:
+				key, val = line.split()
+				self.memory[key] = val
 		
