@@ -1,4 +1,5 @@
 import random
+import pickle
 import numpy as np
 
 class Brain:
@@ -74,13 +75,10 @@ class Brain:
         # print(self.memory)
 
     def save(self, file_name):
-        with open(file_name, 'w') as f:
-            for key, val in self.memory.items():
-                f.write('{} {}\n'.format(key, val))
+        with open(file_name, 'wb') as f:
+            pickle.dump(self.memory, f)
 
     def load(self, file_name):
-        with open(file_name, 'r') as f:
-            for line in f:
-                key, val = line.split()
-                self.memory[key] = val
+        with open(file_name, 'rb') as f:
+            self.memory = pickle.load(f)
         

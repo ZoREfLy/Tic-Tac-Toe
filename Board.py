@@ -126,6 +126,18 @@ class Board:
         self.AI_1.save('p1.dat')
         self.AI_2.save('p2.dat')
 
+    def get_human_move(self):
+        while True:
+            move = input("Your move: ").upper()
+            if move not in self.operations:
+                print("Invalid key! Use Q/W/E/A/S/D/Z/X/C.")
+                continue
+            i, j = self.operations[move]
+            if self.state[i, j] != 0:
+                print("Cell already occupied! Choose another.")
+                continue
+            return i, j
+
     def play(self):
         self.reset()
         mode = int(input("0 for Human-AI, 1 for Human-Human: "))
@@ -145,8 +157,8 @@ class Board:
 
                     while not self.done:
                         if self.first_player:
-                            move = input("Your move: ")
-                            self.step(*self.operations[move.upper()])
+                            i, j = self.get_human_move()
+                            self.step(i, j)
                             self.first_player = not self.first_player
                             print(self)
                         else:
@@ -156,9 +168,9 @@ class Board:
                             print(self)
                 else:
                     while not self.done:
-                        move = input("Your move: ")
+                        i, j = self.get_human_move()
 
-                        self.step(*self.operations[move.upper()])
+                        self.step(i, j)
 
                         self.first_player = not self.first_player
 
@@ -170,7 +182,7 @@ class Board:
     def game_over(self):
         print("Game Over!")
         if not self.winner:
-            print("Tire!")
+            print("Tie!")
         else:
             print("The winner is {}!".format(self.winner))
 
