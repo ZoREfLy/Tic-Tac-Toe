@@ -41,10 +41,12 @@ def train_agents():
 
 def play():
     engine = GameEngine()
-    mode = int(input("0 for Human-AI, 1 for Human-Human: "))
-
-    if mode not in (0, 1):
-        return
+    while True:
+        raw = input("0 for Human-AI, 1 for Human-Human: ")
+        if raw in ("0", "1"):
+            mode = int(raw)
+            break
+        print("Invalid input! Enter 0 or 1.")
 
     print("Instruction:")
     print(" Q | W | E \n-----------\n A | S | D \n-----------\n Z | X | C \n")
