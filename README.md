@@ -81,6 +81,35 @@ During training, this value **decays** — early on, the AI explores a lot (epsi
 
 **How many self-play games to run.** More games = more experience = better values in the lookup table. With symmetry-aware hashing, 50,000 is plenty because the AI recognizes that a corner opening is the same board regardless of *which* corner.
 
+### Canonical Hashing (Symmetry-Aware State Lookup)
+
+A tic-tac-toe board can be rotated and flipped. These 8 boards are all strategically identical — the best move is the same, just rotated:
+
+```
+ O |   |        |   | O      |   |        |   |
+-----------  -----------  -----------  -----------
+   |   |        |   |        |   |        |   |
+-----------  -----------  -----------  -----------
+   |   |        |   |        |   | O    O |   |
+ (original)   (90° CW)     (180°)    (270° CW)
+
+   |   | O      |   |        |   |      O |   |
+-----------  -----------  -----------  -----------
+   |   |        |   |        |   |        |   |
+-----------  -----------  -----------  -----------
+   |   |        |   | O    O |   |        |   |
+ (flipped)    (flip+90)  (flip+180)  (flip+270)
+```
+
+Without canonical hashing, the AI treats these as **8 separate positions** — it has to learn each one independently. That's 8x the work.
+
+`canonical_hash` takes any board, generates all 8 symmetric versions, and always returns the **same key** (the lexicographically smallest one) for all of them. So all 8 of those boards map to the same memory entry. When the AI learns "an O in the corner on an empty board is worth 0.8", that knowledge instantly applies to **all four corners** — no need to learn each one separately.
+
+The impact:
+- State space shrinks ~8x (fewer positions to learn)
+- Training converges much faster (every game teaches 8x more)
+- This is why `TRAINING_EPISODES` can be 50,000 instead of 200,000 and still get better results
+
 ### Putting It All Together
 
 ```
