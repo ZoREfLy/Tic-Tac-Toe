@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tic-Tac-Toe</h1>
+
+        <div id="mode-select">
+            <button onclick="newGame('human-ai')">Human vs AI</button>
+            <button onclick="newGame('human-human')">Human vs Human</button>
+        </div>
+
+        <div id="status"></div>
+
+        <div class="board" id="board">
+            <div class="cell" data-row="0" data-col="0"></div>
+            <div class="cell" data-row="0" data-col="1"></div>
+            <div class="cell" data-row="0" data-col="2"></div>
+            <div class="cell" data-row="1" data-col="0"></div>
+            <div class="cell" data-row="1" data-col="1"></div>
+            <div class="cell" data-row="1" data-col="2"></div>
+            <div class="cell" data-row="2" data-col="0"></div>
+            <div class="cell" data-row="2" data-col="1"></div>
+            <div class="cell" data-row="2" data-col="2"></div>
+        </div>
+
+        <button id="new-game-btn" onclick="newGame(currentMode)" style="display:none">New Game</button>
+        <button id="train-btn" onclick="trainModel()" style="display:none">Train AI Model</button>
+    </div>
+
+    <script src="/static/game.js"></script>
+</body>
+</html>

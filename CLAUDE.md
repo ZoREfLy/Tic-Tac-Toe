@@ -27,11 +27,20 @@ game/
     trainer.py          # Trainer — self-play training loop
     session.py          # GameSession — frontend-agnostic game orchestration
     config.py           # Hyperparameters & constants
+web/
+    __init__.py
+    app.py              # Flask app — thin JSON wrapper over GameSession
+    templates/
+        index.html      # Single-page UI
+    static/
+        style.css       # CSS Grid board, responsive layout
+        game.js         # fetch calls, board rendering, click handlers
 tests/
     test_engine.py
     test_agent.py
     test_trainer.py
     test_session.py
+    test_api.py
 ```
 
 - **game/engine.py** — `GameEngine` class. Manages the 3x3 board state as a NumPy array. Pure game logic with no I/O: `reset()`, `make_move(row, col, player)`, `get_valid_moves()`, `check_winner()`, `state_to_display()`. Player 1 uses `1`, Player 2 uses `-1`, empty cells are `0`. Win detection checks if any row/col/diagonal sums to `3` or `-3`.
@@ -45,3 +54,5 @@ tests/
 - **game/config.py** — Constants: `TRAINING_EPISODES`, `LEARNING_RATE`, `EXPLOIT_RATE`, `MODEL_DIR`.
 
 - **cli.py** — Thin console I/O wrapper over `GameSession`. Keyboard input maps QWEASDZXC to the 3x3 grid positions. In Human-AI mode, if no trained model exists, training runs automatically before the game starts.
+
+- **web/app.py** — Flask app. Thin JSON wrapper over `GameSession` with 5 routes: `GET /` (serves HTML), `POST /api/new-game`, `POST /api/move`, `POST /api/train`, `GET /api/model-exists`. Run with `python3 -m web.app`.

@@ -1,0 +1,119 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+    padding: 2rem;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #e94560;
+}
+
+#mode-select {
+    margin-bottom: 1.5rem;
+}
+
+#mode-select button,
+#new-game-btn,
+#train-btn {
+    padding: 0.6rem 1.4rem;
+    margin: 0 0.4rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #0f3460;
+    color: #eee;
+    transition: background 0.2s;
+}
+
+#mode-select button:hover,
+#new-game-btn:hover,
+#train-btn:hover {
+    background: #e94560;
+}
+
+#status {
+    font-size: 1.2rem;
+    min-height: 2rem;
+    margin-bottom: 1rem;
+    color: #ccc;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    max-width: 300px;
+    margin: 0 auto 1.5rem;
+    background: #16213e;
+    padding: 4px;
+    border-radius: 8px;
+}
+
+.cell {
+    aspect-ratio: 1;
+    background: #0f3460;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s;
+    user-select: none;
+}
+
+.cell:hover {
+    background: #1a4a7a;
+}
+
+.cell-o {
+    color: #e94560;
+}
+
+.cell-x {
+    color: #00d2ff;
+}
+
+.cell.disabled {
+    cursor: default;
+}
+
+.cell.disabled:hover {
+    background: #0f3460;
+}
+
+@keyframes ai-flash {
+    0%   { background: #e94560; }
+    100% { background: #0f3460; }
+}
+
+.ai-move {
+    animation: ai-flash 0.5s ease-out;
+}
+
+#new-game-btn {
+    margin-top: 0.5rem;
+}
+
+#train-btn {
+    margin-top: 0.5rem;
+}
