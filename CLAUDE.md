@@ -5,17 +5,39 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Running
 
 ```bash
-python Board.py
+python cli.py
 ```
 
-The game prompts for mode selection: `0` for Human vs AI, `1` for Human vs Human. No build step or dependencies beyond Python and NumPy.
+The game prompts for mode selection: `0` for Human vs AI, `1` for Human vs Human. Dependencies: Python, NumPy.
+
+## Testing
+
+```bash
+pytest tests/ -v
+```
 
 ## Architecture
 
-This is a two-file Python Tic-Tac-Toe game with a reinforcement learning AI opponent.
+```
+cli.py                  # Console entry point
+game/
+    __init__.py
+    engine.py           # GameEngine — pure state & rules, no I/O
+    agent.py            # Agent — RL agent (temporal difference learning)
+    trainer.py          # Trainer — self-play training loop
+    config.py           # Hyperparameters & constants
+tests/
+    test_engine.py
+    test_agent.py
+    test_trainer.py
+```
 
-- **Board.py** — Game engine and entry point. Manages the 3x3 board state as a NumPy array, handles player input, win/draw detection, and orchestrates training and gameplay. Player 1 uses `1`, Player 2 uses `-1`, empty cells are `0`. Win detection checks if any row/col/diagonal sums to `3` or `-3`. Keyboard input maps QWEASDZXC to the 3x3 grid positions.
+- **game/engine.py** — `GameEngine` class. Manages the 3x3 board state as a NumPy array. Pure game logic with no I/O: `reset()`, `make_move(row, col, player)`, `get_valid_moves()`, `check_winner()`, `state_to_display()`. Player 1 uses `1`, Player 2 uses `-1`, empty cells are `0`. Win detection checks if any row/col/diagonal sums to `3` or `-3`.
 
-- **Brain.py** — RL agent using temporal difference learning. Stores state values in a hash table (`state.tobytes()` → float). During training, explores with probability `1 - epsilon` (random move) and exploits with probability `epsilon` (greedy). After each game, backpropagates the result through visited states using the learning rate. Trained models are saved/loaded as `.dat` files (gitignored).
+- **game/agent.py** — `Agent` class. RL agent using temporal difference learning. Stores state values in a hash table (`state.tobytes()` → float). During training, explores with probability `1 - epsilon` (random move) and exploits with probability `epsilon` (greedy). Trained models are saved/loaded as `.dat` files via pickle.
 
-Training runs 9,000 self-play episodes between two Brain instances, then saves `p1.dat` and `p2.dat`. In Human-AI mode, if `p2.dat` doesn't exist, training runs automatically before the game starts.
+- **game/trainer.py** — `Trainer` class. Runs self-play training between two agents. Constructor takes engine, two agents, episode count. `run()` returns stats dict `{p1_wins, p2_wins, ties}`. Accepts optional progress callback.
+
+- **game/config.py** — Constants: `TRAINING_EPISODES`, `LEARNING_RATE`, `EXPLOIT_RATE`, `MODEL_DIR`.
+
+- **cli.py** — Console entry point. Keyboard input maps QWEASDZXC to the 3x3 grid positions. In Human-AI mode, if `models/p2.dat` doesn't exist, training runs automatically before the game starts.
