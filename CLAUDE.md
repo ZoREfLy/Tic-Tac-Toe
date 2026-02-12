@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Running
 
 ```bash
-python cli.py
+python3 cli.py
 ```
 
 The game prompts for mode selection: `0` for Human vs AI, `1` for Human vs Human. Dependencies: Python, NumPy.
